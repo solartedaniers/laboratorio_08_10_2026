@@ -1,0 +1,24 @@
+name: CI Pipeline API Testing
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del codigo
+        uses: actions/checkout@v4
+
+      - name: Configuration Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: levatar entorno con Docker Compose
+        run: docker-compose up -d -build
+
+      - name: ejecutar prubas con pytest
+        run: docker-compose exec -T api pytest -v
